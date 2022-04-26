@@ -79,9 +79,9 @@ class Trainer():
         for key, value in kwargs.items():
             mlf_client.log_param(key, value)
 
-    #def save_model(self):
-        #joblib.dump(self.pipeline, 'model.joblib')
-        #print("Model saved")
+    def save_model(self):
+        joblib.dump(self.pipeline, 'model.joblib')
+        print("Model saved")
 
 if __name__ == "__main__":
     # get data
@@ -116,8 +116,4 @@ if __name__ == "__main__":
     rmse = trainer.evaluate(X_val, y_val)
     print(rmse)
 
-    #experiment_id = trainer.mlflow_experiment_id
-
-    #print(f"experiment URL: https://mlflow.lewagon.ai/#/experiments/{experiment_id}")
-
-    #trainer.save_model()
+    trainer.save_model()
