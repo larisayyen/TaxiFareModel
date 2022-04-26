@@ -1,16 +1,21 @@
 import pandas as pd
 
-#AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
+AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
+LOCAL_PATH = 'raw_data/train_10k.csv'
+
+DIST_ARGS = dict(start_lat="pickup_latitude",
+                 start_lon="pickup_longitude",
+                 end_lat="dropoff_latitude",
+                 end_lon="dropoff_longitude")
 
 
-#def get_data(nrows=10_000):
-    #'''returns a DataFrame with nrows from s3 bucket'''
-    #df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
-    #return df
-
-def get_data(nrows=10000):
+def get_data(nrows=10000,local=True,**kwargs):
     '''returns a DataFrame with nrows from s3 bucket'''
-    df = pd.read_csv('raw_data/train_10k.csv',nrows=nrows)
+    if local:
+        path = LOCAL_PATH
+    else:
+        path = AWS_BUCKET_PATH
+    df = pd.read_csv(path,nrows=nrows)
     return df
 
 def clean_data(df, test=False):
@@ -29,4 +34,5 @@ def clean_data(df, test=False):
 
 
 if __name__ == '__main__':
-    df = get_data()
+    params = dict(nrows=1000,local=True)
+    df = get_data(**params)
