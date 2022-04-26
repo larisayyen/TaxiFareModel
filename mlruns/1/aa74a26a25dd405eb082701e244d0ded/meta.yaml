@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/yanyi/code/larisayyen/TaxiFareModel/mlruns/1/aa74a26a25dd405eb082701e244d0ded/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: aa74a26a25dd405eb082701e244d0ded
+run_uuid: aa74a26a25dd405eb082701e244d0ded
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1650958777495
+status: 1
+tags: []
+user_id: unknown

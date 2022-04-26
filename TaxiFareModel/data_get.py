@@ -8,9 +8,9 @@ import pandas as pd
     #df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
     #return df
 
-def get_data(nrows=1000):
+def get_data(nrows=10000):
     '''returns a DataFrame with nrows from s3 bucket'''
-    df = pd.read_csv('raw_data/train_1k.csv',nrows=nrows)
+    df = pd.read_csv('raw_data/train_10k.csv',nrows=nrows)
     return df
 
 def clean_data(df, test=False):
