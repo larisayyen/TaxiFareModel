@@ -4,7 +4,7 @@ import numpy as np
 
 from TaxiFareModel.data_get import get_data,clean_data,DIST_ARGS
 
-from TaxiFareModel.utils import haversine_vectorized,haversine_distance
+from TaxiFareModel.utils import haversine_vectorized,minkowski_distance
 
 import pygeohash as gh
 
@@ -43,9 +43,9 @@ class DistanceTransformer(BaseEstimator, TransformerMixin):
         if self.distance_type == "haversine":
             X["distance"] = haversine_vectorized(X, **DIST_ARGS)
         if self.distance_type == "euclidian":
-            X["distance"] = haversine_distance(X, p=2, **DIST_ARGS)
+            X["distance"] = minkowski_distance(X, p=2, **DIST_ARGS)
         if self.distance_type == "manhattan":
-            X["distance"] = haversine_distance(X, p=1, **DIST_ARGS)
+            X["distance"] = minkowski_distance(X, p=1, **DIST_ARGS)
         return X[["distance"]]
 
     def fit(self, X, y=None):
