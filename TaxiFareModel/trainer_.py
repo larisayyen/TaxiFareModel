@@ -30,7 +30,7 @@ MLFLOW_URI = "https://mlflow.lewagon.ai/"
 
 class Trainer(object):
     ESTIMATOR = "Linear"
-    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel05"
+    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel07"
 
     def __init__(self, X, y, **kwargs):
         """
@@ -146,8 +146,8 @@ class Trainer(object):
                                            cv=2,
                                            verbose=1,
                                            random_state=42,
-                                           n_jobs=-1)
-                                           #pre_dispatch=None)
+                                           n_jobs=-1,
+                                           pre_dispatch=None)
     @simple_time_tracker
     def train(self):
         tic = time.time()
@@ -197,7 +197,7 @@ class Trainer(object):
 
     @memoized_property
     def mlflow_run(self):
-        return self.mlflow_client.create_run(self.mlflow_experiment_id)
+        return  self.mlflow_client.create_run(self.mlflow_experiment_id)
 
     def mlflow_log_param(self, key, value):
         if self.mlflow:
@@ -230,18 +230,21 @@ class Trainer(object):
 if __name__ == "__main__":
     warnings.simplefilter(action='ignore', category=FutureWarning)
     # Get and clean data
-    experiment = "taxifare_set_YOURNAME"
+    experiment = "taxifare0427_YOURNAME"
     if "YOURNAME" in experiment:
         print(colored("Please define MlFlow experiment variable with your own name", "red"))
-    params = dict(nrows=100000,
-                  local=True,  # set to False to get data from GCP (Storage or BigQuery)
-                  optimize=True,
-                  estimator="RandomForest",
-                  mlflow=True,  # set to True to log params to mlflow
-                  experiment_name=experiment,
-                  pipeline_memory=None,
-                  distance_type="manhattan",
-                  feateng=["distance_to_center", "direction", "distance", "time_features", "geohash"])
+    params = dict(nrows=10000,
+                upload=True,
+                local=True,  # set to False to get data from GCP (Storage or BigQuery)
+                gridsearch=False,
+                optimize=True,
+                estimator="xgboost",
+                mlflow=True,  # set to True to log params to mlflow
+                experiment_name=experiment,
+                pipeline_memory=None, # None if no caching and True if caching expected
+                distance_type="manhattan",
+                feateng=["distance_to_center", "direction", "distance", "time_features", "geohash"],
+                n_jobs=1) # Try with njobs=1 and njobs = -1
     print("############   Loading Data   ############")
     df = get_data(**params)
     df = clean_data(df)
@@ -253,6 +256,8 @@ if __name__ == "__main__":
     # Train and save model, locally and
     t = Trainer(X=X_train, y=y_train, **params)
     del X_train, y_train
+    #print(colored("############  gridsearching model   ############", "red"))
+    #t.add_grid_search()
     print(colored("############  Training model   ############", "red"))
     t.train()
     print(colored("############  Evaluating model ############", "blue"))
