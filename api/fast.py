@@ -57,6 +57,6 @@ def make_predict(pickup_datetime,
     pipeline = joblib.load(PATH_TO_LOCAL_MODEL)
 
     y_pred = pipeline.predict(X_pred)
-    print(y_pred)
+    #print(y_pred)
 
     return {'key':float(y_pred[0])}
