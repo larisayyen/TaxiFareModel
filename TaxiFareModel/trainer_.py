@@ -30,7 +30,7 @@ MLFLOW_URI = "https://mlflow.lewagon.ai/"
 
 class Trainer(object):
     ESTIMATOR = "Linear"
-    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel08"
+    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel09"
 
     def __init__(self, X, y, **kwargs):
         """
@@ -236,11 +236,11 @@ if __name__ == "__main__":
     if "YOURNAME" in experiment:
         print(colored("Please define MlFlow experiment variable with your own name", "red"))
     params = dict(nrows=10000,
-                upload=True,
+                upload=False,
                 local=True,  # set to False to get data from GCP (Storage or BigQuery)
-                gridsearch=True,
+                gridsearch=False,
                 optimize=True,
-                estimator="xgboost",
+                estimator="RandomForest",
                 mlflow=True,  # set to True to log params to mlflow
                 experiment_name=experiment,
                 pipeline_memory=None, # None if no caching and True if caching expected
