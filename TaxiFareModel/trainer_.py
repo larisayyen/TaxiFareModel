@@ -30,7 +30,7 @@ MLFLOW_URI = "https://mlflow.lewagon.ai/"
 
 class Trainer(object):
     ESTIMATOR = "Linear"
-    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel07"
+    EXPERIMENT_NAME = "[CN][SH][L]TaxifareModel08"
 
     def __init__(self, X, y, **kwargs):
         """
@@ -146,8 +146,10 @@ class Trainer(object):
                                            cv=2,
                                            verbose=1,
                                            random_state=42,
-                                           n_jobs=-1,
-                                           pre_dispatch=None)
+                                           n_jobs=-1)
+                                           #pre_dispatch=None)
+        self.pipeline.fit(self.X_train,self.y_train)
+
     @simple_time_tracker
     def train(self):
         tic = time.time()
@@ -236,15 +238,15 @@ if __name__ == "__main__":
     params = dict(nrows=10000,
                 upload=True,
                 local=True,  # set to False to get data from GCP (Storage or BigQuery)
-                gridsearch=False,
+                gridsearch=True,
                 optimize=True,
                 estimator="xgboost",
                 mlflow=True,  # set to True to log params to mlflow
                 experiment_name=experiment,
                 pipeline_memory=None, # None if no caching and True if caching expected
                 distance_type="manhattan",
-                feateng=["distance_to_center", "direction", "distance", "time_features", "geohash"],
-                n_jobs=1) # Try with njobs=1 and njobs = -1
+                feateng=["distance_to_center", "direction", "distance", "time_features", "geohash"])
+                #n_jobs=1) # Try with njobs=1 and njobs = -1
     print("############   Loading Data   ############")
     df = get_data(**params)
     df = clean_data(df)
@@ -256,11 +258,13 @@ if __name__ == "__main__":
     # Train and save model, locally and
     t = Trainer(X=X_train, y=y_train, **params)
     del X_train, y_train
-    #print(colored("############  gridsearching model   ############", "red"))
-    #t.add_grid_search()
     print(colored("############  Training model   ############", "red"))
     t.train()
     print(colored("############  Evaluating model ############", "blue"))
     t.evaluate()
+    # print(colored("############  gridsearching model   ############", "red"))
+    # t.add_grid_search()
+    # print(colored("############  Evaluating again ############", "blue"))
+    # t.evaluate()
     print(colored("############   Saving model    ############", "green"))
     t.save_model()

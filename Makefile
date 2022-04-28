@@ -27,3 +27,6 @@ clean:
 	@rm -fr TaxiFareModel-*.dist-info
 	@rm -fr TaxiFareModel.egg-info
 	-@rm model.joblib
+
+run_api:
+	uvicorn api.fast:app --reload
